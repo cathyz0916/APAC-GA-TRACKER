@@ -349,7 +349,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
           📂 Choose Excel File
           <input type="file" id="excelFileInp" accept=".xlsx,.xls" style="display:none" onchange="handleExcelUpload(event)">
         </label>
-        <span id="uploadFileName" style="font-size:11px;color:var(--gm);margin-left:8px">SMJ-GA-Customers-APAC-2026-11-24 (6).xlsx</span>
+        <span id="uploadFileName" style="font-size:11px;color:var(--gm);margin-left:8px">SMJ-GA-Customers-APAC-2026-11-24 (8).xlsx</span>
       </div>
 
       <div class="gh-prog-wrap"><div class="gh-prog" id="ghProgress" style="width: 10%;"></div></div>
@@ -379,7 +379,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
-    <a href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker" target="_blank" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.35); color: rgb(255, 255, 255); font-size: 11px; padding: 5px 13px; border-radius: 14px; text-decoration: none; white-space: nowrap; transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
+    <a href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker" target="_blank" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:11px;padding:5px 13px;border-radius:14px;text-decoration:none;white-space:nowrap;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
       Global GA Tracker ↗
     </a>
     <div class="hdr-badge" id="hdrBadge">CW 47 · 211 customers</div>
@@ -453,7 +453,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 <div class="content">
   <div class="sel-bar" id="selBar">
     <span style="font-weight:500">Active selection:</span>
-    <span id="selTags"><span class="sel-tag">Phase: P4<button onclick="window._sc[0]()">×</button></span></span>
+    <span id="selTags"></span>
     <span class="sel-clear" onclick="clearSel()">Clear</span>
   </div>
 
@@ -3818,42 +3818,16 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 
 <div class="footer">SAP Internal &nbsp;·&nbsp; Data source: GA Customers workbook &nbsp;·&nbsp; APAC only</div>
 
-<div class="dd-ov" id="ddOv" onclick="closeDrill()" style="display: none;"></div>
+<div class="dd-ov" id="ddOv" onclick="closeDrill()"></div>
 <div class="dd-pn" id="ddPn">
   <div class="dd-hdr">
-    <div><h3 id="ddTtl">Optimize &amp; Scale — Accounts</h3><div class="dd-meta" id="ddMeta">2 customers</div></div>
+    <div><h3 id="ddTtl">Account Detail</h3><div class="dd-meta" id="ddMeta"></div></div>
     <button class="dd-x" onclick="closeDrill()">✕</button>
   </div>
   <div class="dd-body">
     <table class="dd-tbl">
       <thead><tr><th>CRM ID</th><th>Customer</th><th>MU</th><th>Phase</th><th>Step</th><th>Role</th><th>Responsible</th><th>Industry</th><th>Priority</th><th>CW</th><th>Status</th><th>See Playbook</th></tr></thead>
-      <tbody id="ddBody"><tr>
-        <td style="color:#999;font-size:10px">0002637127</td>
-        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">John Keells Holdings PLC</td>
-        <td>India</td>
-        <td><span class="pt pt-P4" style="font-size:9.5px">P4</span> <span style="color:var(--gd);font-size:10.5px">Optimize &amp; Scale</span></td>
-        <td style="color:#666">Step 9</td>
-        <td style="color:#666">EA</td>
-        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Ramanujam B R</td>
-        <td style="color:#666">Consumer Products</td>
-        <td>Other</td>
-        <td>CW 45</td>
-        <td><span class="sd sd-a"></span>Active</td>
-        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0002637127" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
-      </tr><tr>
-        <td style="color:#999;font-size:10px">0013963761</td>
-        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Samvardhana Motherson</td>
-        <td>India</td>
-        <td><span class="pt pt-P4" style="font-size:9.5px">P4</span> <span style="color:var(--gd);font-size:10.5px">Optimize &amp; Scale</span></td>
-        <td style="color:#666">Step 9</td>
-        <td style="color:#666">EA</td>
-        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Swati Saxena</td>
-        <td style="color:#666">Automotive</td>
-        <td>Other</td>
-        <td>CW 45</td>
-        <td><span class="sd sd-a"></span>Active</td>
-        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0013963761" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
-      </tr></tbody>
+      <tbody id="ddBody"></tbody>
     </table>
   </div>
 </div>
