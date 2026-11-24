@@ -3840,7 +3840,7 @@ const ALL_DATA = /*GA_DATA_START*/[{"crmId":"0001130632","customer":"Tata Motors
 
 
 const GA_TRACKER = 'https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker';
-const CW_ORDER=['CW 44','CW 45','CW 46','CW 47','CW 48','CW 49'];
+const CW_ORDER=[]; // built from ALL_DATA at init and after upload
 const PH=['P1','P2','P3','P4','P5','P6'];
 const PHL={P1:'CW Qualified & Positioned',P2:'Prepare & Prerequisites',P3:'Plan & Activate',P4:'Optimize & Scale',P5:'Productization & Consumption',P6:'Reference & Advocacy'};
 const PHC={P1:'#89D1FF',P2:'#1B90FF',P3:'#0070F2',P4:'#5B2AA7',P5:'#002A86',P6:'#444'};
@@ -3851,7 +3851,7 @@ const OTH_ROLES=new Set(['AE','CA','SPM','TQM']);
 const SMALL=4;
 
 let S={
-  cwUpTo:'CW 47', mus:[], roleFilter:[], phases:[], statuses:[],
+  cwUpTo:'', mus:[], roleFilter:[], phases:[], statuses:[],
   selMU:null, selPhase:null, selCW:null, selRole:null,
   roleExp:{EA:true,NonEA:true,CSM:false,OTH:true},
   srchCustomer:'', srchResponsible:'', srchCrmId:'',
@@ -4490,12 +4490,12 @@ function onCWChange(){S.cwUpTo=$('cwSel').value;updateAll();}
 function toggleSelPhase(p){S.selPhase=S.selPhase===p?null:p;updateAll();}
 
 function clearAllFilters(){
-  S.cwUpTo='CW 47';S.mus=[];S.roleFilter=[];S.phases=[];S.statuses=[];
+  S.mus=[];S.roleFilter=[];S.phases=[];S.statuses=[];
   S.selMU=null;S.selPhase=null;S.selCW=null;S.selRole=null;
   S.srchCustomer='';S.srchResponsible='';S.srchCrmId='';
-  $('cwSel').value='CW 47';
   ['srchCustomer','srchResponsible','srchCrmId'].forEach(id=>{const e=$(id);if(e)e.value='';});
   syncSearchUI();
+  updateCWOptions(); // resets CW to best default for current date
   buildChips();buildPhaseChips();buildRolePanel();updateAll();
 }
 function clearSel(){S.selMU=null;S.selPhase=null;S.selCW=null;S.selRole=null;updateAll();}
@@ -4878,16 +4878,37 @@ function updateCWOptions(){
     const na=parseInt(a.replace(/\D/g,'')),nb=parseInt(b.replace(/\D/g,''));
     return na-nb;
   });
+
   // Rebuild CW_ORDER in place
   CW_ORDER.length=0;cwSorted.forEach(c=>CW_ORDER.push(c));
+
+  // Determine default CW = latest CW in data that is ≤ current ISO calendar week
+  // This prevents future-scheduled CWs from inflating P1 by default
+  const curISOWeek=(()=>{
+    const d=new Date();
+    // ISO week: week containing Thursday of that week
+    const thu=new Date(d);
+    thu.setDate(d.getDate()-(d.getDay()||7)+4); // nearest Thursday
+    const yearStart=new Date(thu.getFullYear(),0,1);
+    return Math.ceil(((thu-yearStart)/86400000+1)/7);
+  })();
+
+  // All CWs with week number ≤ current week = "already happened"
+  const pastCWs=cwSorted.filter(c=>parseInt(c.replace(/\D/g,''))<=curISOWeek);
+  // Prefer a CW the user already selected if it's valid; else default to latest past CW
+  const bestDefault=pastCWs.length>0?pastCWs[pastCWs.length-1]:cwSorted[cwSorted.length-1]||'';
+
+  // Only change S.cwUpTo if the current selection is not in the new data
+  if(!cwSorted.includes(S.cwUpTo)){
+    S.cwUpTo=bestDefault;
+  }
+  // On first init (cwUpTo is empty), always use bestDefault
+  if(!S.cwUpTo) S.cwUpTo=bestDefault;
+
   // Rebuild dropdown
   const sel=$('cwSel');if(!sel)return;
-  const curVal=S.cwUpTo;
-  sel.innerHTML=cwSorted.map(c=>`<option value="${c}"${c===curVal?' selected':''}>${c}</option>`).join('');
-  if(!cwSorted.includes(S.cwUpTo)){
-    S.cwUpTo=cwSorted[cwSorted.length-1]||S.cwUpTo;
-    sel.value=S.cwUpTo;
-  }
+  sel.innerHTML=cwSorted.map(c=>`<option value="${c}"${c===S.cwUpTo?' selected':''}>${c}</option>`).join('');
+  sel.value=S.cwUpTo;
 }
 
 // ── UPLOAD MODAL open  ────────────────────────────────────────────────
@@ -4986,9 +5007,10 @@ function showGHToast(msg){
 buildChips();
 buildPhaseChips();
 buildRolePanel();
+updateCWOptions(); // build CW list from data, default to latest CW ≤ today
 updateAll();
 
 </script>
 
 
-<div id="ghToast" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgb(0, 42, 134); color: rgb(255, 255, 255); padding: 9px 20px; border-radius: 20px; font-size: 12px; font-weight: 500; z-index: 600; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; opacity: 1; transition: opacity 0.2s; pointer-events: none;">✓ 230 customers loaded — dashboard refreshed!</div></body></html>
+<div id="ghToast" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgb(0, 42, 134); color: rgb(255, 255, 255); padding: 9px 20px; border-radius: 20px; font-size: 12px; font-weight: 500; z-index: 600; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; opacity: 0; transition: opacity 0.2s; pointer-events: none;">✓ 230 customers loaded — dashboard refreshed!</div></body></html>
