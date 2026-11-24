@@ -228,14 +228,28 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 .all-acct-tbl tbody tr:hover{background:#F0F7FF;cursor:pointer}
 .all-acct-tbl tbody td{font-size:10.5px;padding:6px 6px;border-bottom:1px solid var(--gl);color:#000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* SEARCH INPUTS */
-.srch-box{display:flex;align-items:center;gap:0;border:1.5px solid var(--gl);border-radius:7px;background:#fff;padding:0 6px;height:28px;min-width:170px;max-width:220px;transition:border-color .15s}
-.srch-box:focus-within{border-color:var(--b6);background:#fff}
+.srch-box{position:relative;display:flex;align-items:center;gap:0;border:1.5px solid var(--gl);border-radius:7px;background:#fff;padding:0 6px;height:28px;min-width:170px;max-width:220px;transition:border-color .15s,border-radius .1s}
+.srch-box:focus-within{border-color:var(--b6)}
 .srch-box.has-value{border-color:var(--b10);background:#EBF5FF}
+.srch-box.dd-open{border-radius:7px 7px 0 0;border-color:var(--b6);border-bottom-color:transparent}
 .srch-icon{font-size:12px;color:var(--gm);flex-shrink:0;user-select:none}
 .srch-inp{border:none;background:transparent;outline:none;font-size:11.5px;font-family:inherit;color:#000;flex:1;padding:0 5px;min-width:80px}
 .srch-inp::placeholder{color:var(--gm)}
 .srch-clr{background:none;border:none;cursor:pointer;color:var(--gm);font-size:11px;padding:0;line-height:1;flex-shrink:0}
 .srch-clr:hover{color:var(--red)}
+/* Dropdown */
+.srch-dd{display:none;position:absolute;top:calc(100% + 1px);left:-1.5px;right:-1.5px;
+  background:#fff;border:1.5px solid var(--b6);border-top:none;
+  border-radius:0 0 8px 8px;box-shadow:0 6px 16px rgba(0,42,134,.13);
+  z-index:500;max-height:220px;overflow-y:auto}
+.srch-dd.open{display:block}
+.srch-dd-item{padding:7px 10px;cursor:pointer;font-size:11.5px;color:#000;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  border-bottom:1px solid var(--gl);transition:background .08s}
+.srch-dd-item:last-child{border-bottom:none}
+.srch-dd-item:hover,.srch-dd-item.hov{background:var(--b2);color:var(--b10)}
+.srch-dd-item mark{background:transparent;color:var(--b7);font-weight:700;padding:0}
+.srch-dd-more{padding:5px 10px;font-size:10.5px;color:var(--gm);border-top:1px solid var(--gl);font-style:italic}
 .playbook-link{color:var(--b7);font-size:10.5px;text-decoration:none;font-weight:500}
 .playbook-link:hover{text-decoration:underline}
 /* ── GitHub / Admin buttons ── */
@@ -346,7 +360,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
         <div class="gh-lbl" style="margin-bottom:4px">Step 2 &nbsp;—&nbsp; Publish to GitHub <span style="font-weight:400;color:var(--gm)">(optional)</span></div>
         <p style="font-size:11.5px;color:var(--gd);line-height:1.5">The dashboard will be committed to GitHub with the <strong>new data embedded</strong>, so all visitors see the updated version after page reload.</p>
       </div>
-      <div id="commitUrlWrap" style=""><a id="commitUrl" href="https://github.com/cathyz0916/APAC-GA-TRACKER/commit/99d3e185b681e9bff2ca1dab1225bf19154a308c" target="_blank" style="font-size:11.5px;color:var(--b7)">View commit on GitHub ↗</a></div>
+      <div id="commitUrlWrap" style="display:none"><a id="commitUrl" href="#" target="_blank" style="font-size:11.5px;color:var(--b7)"></a></div>
 
     </div>
     <div class="gh-modal-foot">
@@ -365,7 +379,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
-    <a href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker" target="_blank" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:11px;padding:5px 13px;border-radius:14px;text-decoration:none;white-space:nowrap;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
+    <a href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker" target="_blank" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.35); color: rgb(255, 255, 255); font-size: 11px; padding: 5px 13px; border-radius: 14px; text-decoration: none; white-space: nowrap; transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
       Global GA Tracker ↗
     </a>
     <div class="hdr-badge" id="hdrBadge">CW 47 · 144 customers</div>
@@ -410,21 +424,28 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
   <div class="fb-row" style="border-top:1px solid var(--gl);padding-top:8px">
     <span class="fl" style="flex-shrink:0;letter-spacing:1px">Search</span>
     <div style="display:flex;gap:8px;flex-wrap:wrap;flex:1">
-      <div class="srch-box">
+
+      <div class="srch-box" id="srchBoxCustomer">
         <span class="srch-icon">🔍</span>
-        <input class="srch-inp" id="srchCustomer" placeholder="Customer Name" oninput="onSearch()" autocomplete="off">
-        <button class="srch-clr" id="srchCustomerClr" onclick="clearSearch('srchCustomer')" style="display:none">✕</button>
+        <input class="srch-inp" id="srchCustomer" placeholder="Customer Name" oninput="onSearch();showDD('srchCustomer','customer')" onfocus="showDD('srchCustomer','customer')" onkeydown="handleSearchKey(event,'srchCustomer')" autocomplete="off">
+        <button class="srch-clr" id="srchCustomerClr" onclick="clearSearch('srchCustomer')" style="display: none;">✕</button>
+        <div class="srch-dd" id="ddCustomer"><div class="srch-dd-item" data-val="Origin Energy Services Ltd" data-idx="0" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',0)">Origin <mark>Ener</mark>gy Services Ltd</div><div class="srch-dd-item" data-val="PT Geo Dipa Energi" data-idx="1" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',1)">PT Geo Dipa <mark>Ener</mark>gi</div><div class="srch-dd-item" data-val="Sarawak Energy Berhad" data-idx="2" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',2)">Sarawak <mark>Ener</mark>gy Berhad</div><div class="srch-dd-item hov" data-val="Tata AIG General Insurance" data-idx="3" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',3)">Tata AIG G<mark>ener</mark>al Insurance</div><div class="srch-dd-item" data-val="WINCOMMERCE GENERAL COMMERCIAL SERVICES JOINT STOCK COMPANY" data-idx="4" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',4)">WINCOMMERCE G<mark>ENER</mark>AL COMMERCIAL SERVICES JOINT STOCK COMPANY</div><div class="srch-dd-item" data-val="Woodside Energy Limited" data-idx="5" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',5)">Woodside <mark>Ener</mark>gy Limited</div></div>
       </div>
-      <div class="srch-box">
+
+      <div class="srch-box" id="srchBoxResponsible">
         <span class="srch-icon">🔍</span>
-        <input class="srch-inp" id="srchResponsible" placeholder="Responsible Name" oninput="onSearch()" autocomplete="off">
-        <button class="srch-clr" id="srchResponsibleClr" onclick="clearSearch('srchResponsible')" style="display:none">✕</button>
+        <input class="srch-inp" id="srchResponsible" placeholder="Responsible Name" oninput="onSearch();showDD('srchResponsible','responsible')" onfocus="showDD('srchResponsible','responsible')" onkeydown="handleSearchKey(event,'srchResponsible')" autocomplete="off">
+        <button class="srch-clr" id="srchResponsibleClr" onclick="clearSearch('srchResponsible')" style="display: none;">✕</button>
+        <div class="srch-dd" id="ddResponsible"><div class="srch-dd-item" data-val="Preeti Gusain" data-idx="0" onmousedown="pickDD(event,'srchResponsible')" onmouseover="hovDD('srchResponsible',0)">Preeti Gu<mark>sai</mark>n</div><div class="srch-dd-item hov" data-val="Sai Jaganath Ramisetti; Nicole Lim" data-idx="1" onmousedown="pickDD(event,'srchResponsible')" onmouseover="hovDD('srchResponsible',1)"><mark>Sai</mark> Jaganath Ramisetti; Nicole Lim</div></div>
       </div>
-      <div class="srch-box">
+
+      <div class="srch-box" id="srchBoxCrmId">
         <span class="srch-icon">🔍</span>
-        <input class="srch-inp" id="srchCrmId" placeholder="CRM ID" oninput="onSearch()" autocomplete="off">
+        <input class="srch-inp" id="srchCrmId" placeholder="CRM ID" oninput="onSearch();showDD('srchCrmId','crmId')" onfocus="showDD('srchCrmId','crmId')" onkeydown="handleSearchKey(event,'srchCrmId')" autocomplete="off">
         <button class="srch-clr" id="srchCrmIdClr" onclick="clearSearch('srchCrmId')" style="display:none">✕</button>
+        <div class="srch-dd" id="ddCrmId"></div>
       </div>
+
     </div>
   </div>
 </div>
@@ -432,7 +453,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 <div class="content">
   <div class="sel-bar" id="selBar">
     <span style="font-weight:500">Active selection:</span>
-    <span id="selTags"></span>
+    <span id="selTags"><span class="sel-tag">Phase: P2<button onclick="window._sc[0]()">×</button></span></span>
     <span class="sel-clear" onclick="clearSel()">Clear</span>
   </div>
 
@@ -466,7 +487,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
   <div class="grid-wow">
     <div class="cc">
       <div class="cc-title">Accumulated Growth by CW Week</div>
-      <div class="h280" style="padding-bottom:30px"><canvas id="wowChart" style="box-sizing: border-box; display: block; height: 250px; width: 747px;" width="934" height="312"></canvas></div>
+      <div class="h280" style="padding-bottom:30px"><canvas id="wowChart" style="box-sizing: border-box; display: block; height: 250px; width: 747px;" width="747" height="250"></canvas></div>
     <div id="wowHTMLLegend" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-size: 10px; color: rgb(102, 102, 102); padding: 0px 2px;"><span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:10px;border-radius:2px;background:#C9E5FF"></span>P1 — CW Qualified &amp; Positioned</span><span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:10px;border-radius:2px;background:#1B90FF"></span>P2 — Prepare Prerequisites</span><span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:10px;border-radius:2px;background:#0070F2"></span>P3 — Plan &amp; Activate</span><span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:10px;border-radius:2px;background:#002A86"></span>P5 — Productization &amp; Consumption</span></div></div>
     <div class="cc">
       <div class="cc-title">Accumulated CW Comparison</div>
@@ -2852,16 +2873,406 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 
 <div class="footer">SAP Internal &nbsp;·&nbsp; Data source: GA Customers workbook &nbsp;·&nbsp; APAC only</div>
 
-<div class="dd-ov" id="ddOv" onclick="closeDrill()"></div>
+<div class="dd-ov" id="ddOv" onclick="closeDrill()" style="display: none;"></div>
 <div class="dd-pn" id="ddPn">
   <div class="dd-hdr">
-    <div><h3 id="ddTtl">Account Detail</h3><div class="dd-meta" id="ddMeta"></div></div>
+    <div><h3 id="ddTtl">Prepare Prerequisites — Accounts</h3><div class="dd-meta" id="ddMeta">30 customers</div></div>
     <button class="dd-x" onclick="closeDrill()">✕</button>
   </div>
   <div class="dd-body">
     <table class="dd-tbl">
       <thead><tr><th>CRM ID</th><th>Customer</th><th>MU</th><th>Phase</th><th>Step</th><th>Role</th><th>Responsible</th><th>Industry</th><th>Priority</th><th>CW</th><th>Status</th><th>See Playbook</th></tr></thead>
-      <tbody id="ddBody"></tbody>
+      <tbody id="ddBody"><tr>
+        <td style="color:#999;font-size:10px">0050736873</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Alisoft China Holding Limited</td>
+        <td>G.China</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Stanley Xie</td>
+        <td style="color:#666"></td>
+        <td>Other</td>
+        <td>CW 45</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050736873" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0004029398</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">ASM Front-End Manufacturing Singapore</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">TQM</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Pushpa Sathasivam; Satyya Sundar Akkinapragada</td>
+        <td style="color:#666">Industrial Manufacturing</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 45</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004029398" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0000032429</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Brunei Shell Petroleum Company Sdn Bhd</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Reagan Chan</td>
+        <td style="color:#666">Oil, Gas and Energy</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0000032429" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001107564</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Celcom Berhad</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">CSM - HCM</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Renjith Nair</td>
+        <td style="color:#666">Telecommunications</td>
+        <td>Other</td>
+        <td>CW 44</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001107564" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0004719094</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Department of Transport and Main Roads</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Alan Beven</td>
+        <td style="color:#666">Public Sector</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004719094" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001101941</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">EMPLOYEES PROVIDENT FUND BOARD</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Quan Nguyen; Emil Farkhan</td>
+        <td style="color:#666">Public Sector</td>
+        <td>Priority 2</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001101941" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001229975</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Foodstuffs South Island Limited</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Chandra Shekhar Singh</td>
+        <td style="color:#666">Retail</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001229975" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0003114817</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">GIC Private Limited</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">HCM CSM</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Nicole Lim</td>
+        <td style="color:#666">Banking</td>
+        <td>Other</td>
+        <td>CW 44</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003114817" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001142864</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Kuok (Singapore) Limited</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Carola Tiefenthaler</td>
+        <td style="color:#666">Wholesale Distribution</td>
+        <td>Other</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001142864" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0005526959</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Lee Kum Kee International Holdings Ltd</td>
+        <td>G.China</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Ting Zhou; Paul Kwok</td>
+        <td style="color:#666">Consumer Products</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005526959" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0007252500</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Lion Pty Ltd</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Cornelis Laurens Oversier</td>
+        <td style="color:#666">Consumer Products</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0007252500" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0011396304</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">LX Hausys, Ltd.</td>
+        <td>Korea</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Cheolmin Lim; Seo Hyun Jung</td>
+        <td style="color:#666">Chemicals</td>
+        <td>Priority 2</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0011396304" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001210296</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Mitre 10 (New Zealand) Limited</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Chandra Shekhar Singh</td>
+        <td style="color:#666">Retail</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001210296" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001086748</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">National University of Singapore</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Akash Nambiar</td>
+        <td style="color:#666">Higher Education and Research</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 45</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001086748" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0011932698</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">NEC Corporation</td>
+        <td>Japan</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Rena Shoji; Yasuko Sekiguchi</td>
+        <td style="color:#666">High Tech</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 44</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0011932698" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0003255937</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Page Industries Limited</td>
+        <td>India</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">EA: Devesh Thakur</td>
+        <td style="color:#666">Retail</td>
+        <td>Priority 2</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003255937" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001095500</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Perusahaan Otomobil Nasional Sdn Bhd</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Reagan Chan</td>
+        <td style="color:#666">Automotive</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001095500" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0005137940</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">PT Pamapersada Nusantara</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Febry Putro</td>
+        <td style="color:#666">Mill Products and Mining</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005137940" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0003860293</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">RGE Pte. Ltd.</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Carola Tiefenthaler</td>
+        <td style="color:#666">Mill Products and Mining</td>
+        <td>Other</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003860293" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001099481</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Santos Ltd</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Ava Kodeiri</td>
+        <td style="color:#666">Oil, Gas and Energy</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001099481" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0021785711</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">South32 Group Operations Pty Ltd</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Ross Robertson</td>
+        <td style="color:#666">Mill Products and Mining</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0021785711" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0002086330</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Tata AIG General Insurance</td>
+        <td>India</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">HCM CSM</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Divya Kapoor</td>
+        <td style="color:#666">Insurance</td>
+        <td>Other</td>
+        <td>CW 45</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0002086330" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001130632</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Tata Motors Limited</td>
+        <td>India</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Nitin Shah</td>
+        <td style="color:#666">Automotive</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 44</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001130632" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001250893</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Technological Resources Pty Ltd</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Ava Shabani</td>
+        <td style="color:#666">Mill Products and Mining</td>
+        <td>Other</td>
+        <td>CW 45</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001250893" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0004412571</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Thai Airways International</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Kannika Suwanphibun</td>
+        <td style="color:#666">Travel and Transportation</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004412571" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0001098986</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">TOYOTA MOTOR CORPORATION</td>
+        <td>Japan</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 6</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Takeshi Nakamura</td>
+        <td style="color:#666">Automotive</td>
+        <td><span style="color:#E87E04;font-weight:600">★ Top 100</span></td>
+        <td>CW 44</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001098986" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0010299995</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Vietnam Technological &amp; Commercial Joint Stock Bank (TECHCOMBANK)</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">HCM CSM</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Khoa Nguyen - SAP</td>
+        <td style="color:#666">Banking</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0010299995" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0050005208</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">WINCOMMERCE GENERAL COMMERCIAL SERVICES JOINT STOCK COMPANY</td>
+        <td>South East Asia</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 4</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Quan Nguyen</td>
+        <td style="color:#666">Retail</td>
+        <td>Other</td>
+        <td>CW 47</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050005208" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0000032377</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Woodside Energy Limited</td>
+        <td>ANZ</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">TQM</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Alex Romashko; Sarah Hawkins</td>
+        <td style="color:#666">Oil, Gas and Energy</td>
+        <td>Priority 2</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0000032377" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr><tr>
+        <td style="color:#999;font-size:10px">0050623409</td>
+        <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">XCMG International Trading Corporation (HK) Limited</td>
+        <td>G.China</td>
+        <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare Prerequisites</span></td>
+        <td style="color:#666">Step 5</td>
+        <td style="color:#666">EA</td>
+        <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Sabrina Sun; Like Li</td>
+        <td style="color:#666">Wholesale Distribution</td>
+        <td>Other</td>
+        <td>CW 46</td>
+        <td><span class="sd sd-a"></span>Active</td>
+        <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050623409" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
+      </tr></tbody>
     </table>
   </div>
 </div>
@@ -3566,10 +3977,10 @@ function clearSearch(inputId){
   if(inputId==='srchCustomer') S.srchCustomer='';
   else if(inputId==='srchResponsible') S.srchResponsible='';
   else if(inputId==='srchCrmId') S.srchCrmId='';
+  hideDD(inputId);
   syncSearchUI();updateAll();
 }
 function syncSearchUI(){
-  // Update clear button visibility and box highlight
   ['srchCustomer','srchResponsible','srchCrmId'].forEach(id=>{
     const inp=$(id),clr=$(id+'Clr'),box=inp?.closest('.srch-box');
     if(!inp)return;
@@ -3578,6 +3989,120 @@ function syncSearchUI(){
     if(box){if(hasVal)box.classList.add('has-value');else box.classList.remove('has-value');}
   });
 }
+
+// ── SEARCH AUTOCOMPLETE ─────────────────────────────────────────────
+const _DD_MAP={srchCustomer:'ddCustomer',srchResponsible:'ddResponsible',srchCrmId:'ddCrmId'};
+const _BOX_MAP={srchCustomer:'srchBoxCustomer',srchResponsible:'srchBoxResponsible',srchCrmId:'srchBoxCrmId'};
+const _FIELD_MAP={srchCustomer:'customer',srchResponsible:'responsible',srchCrmId:'crmId'};
+let _ddHovIdx={};
+
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function getSuggestions(field,q){
+  if(!q)return[];
+  const ql=q.toLowerCase();
+  const seen=new Set(),out=[];
+  ALL_DATA.forEach(r=>{
+    const v=r[field];
+    if(!v||seen.has(v))return;
+    if(String(v).toLowerCase().includes(ql)){seen.add(v);out.push(String(v));}
+  });
+  out.sort((a,b)=>a.localeCompare(b,'en',{sensitivity:'base'}));
+  return out;
+}
+
+function showDD(inputId,field){
+  const inp=$(inputId),dd=$(_DD_MAP[inputId]),box=$(_BOX_MAP[inputId]);
+  if(!inp||!dd||!box)return;
+  const q=inp.value.trim();
+  if(!q){hideDD(inputId);return;}
+
+  const all=getSuggestions(field,q);
+  if(!all.length){
+    dd.innerHTML=`<div class="srch-dd-item" style="color:var(--gm);cursor:default">No matches found</div>`;
+    dd.classList.add('open');box.classList.add('dd-open');
+    return;
+  }
+
+  const MAX=12,shown=all.slice(0,MAX),extra=all.length-MAX;
+  const ql=q.toLowerCase();
+
+  dd.innerHTML=shown.map((v,i)=>{
+    const idx=v.toLowerCase().indexOf(ql);
+    let disp=idx>=0
+      ?escH(v.slice(0,idx))+`<mark>${escH(v.slice(idx,idx+q.length))}</mark>`+escH(v.slice(idx+q.length))
+      :escH(v);
+    return `<div class="srch-dd-item" data-val="${escH(v)}" data-idx="${i}"
+      onmousedown="pickDD(event,'${inputId}')"
+      onmouseover="hovDD('${inputId}',${i})">${disp}</div>`;
+  }).join('')+(extra>0?`<div class="srch-dd-more">+${extra} more — keep typing to narrow</div>`:'');
+
+  _ddHovIdx[inputId]=-1;
+  dd.classList.add('open');box.classList.add('dd-open');
+}
+
+function hideDD(inputId){
+  const dd=$(_DD_MAP[inputId]),box=$(_BOX_MAP[inputId]);
+  if(dd)dd.classList.remove('open');
+  if(box)box.classList.remove('dd-open');
+}
+function hideAllDD(){Object.keys(_DD_MAP).forEach(hideDD);}
+
+function hovDD(inputId,idx){
+  _ddHovIdx[inputId]=idx;
+  const dd=$(_DD_MAP[inputId]);if(!dd)return;
+  dd.querySelectorAll('.srch-dd-item').forEach((el,i)=>{
+    if(i===idx)el.classList.add('hov');else el.classList.remove('hov');
+  });
+}
+
+function pickDD(e,inputId){
+  e.preventDefault();
+  const val=e.currentTarget.getAttribute('data-val');
+  const inp=$(inputId);if(!inp||!val)return;
+  inp.value=val;
+  if(inputId==='srchCustomer')S.srchCustomer=val;
+  else if(inputId==='srchResponsible')S.srchResponsible=val;
+  else if(inputId==='srchCrmId')S.srchCrmId=val;
+  hideDD(inputId);syncSearchUI();updateAll();
+  inp.focus();
+}
+
+function handleSearchKey(e,inputId){
+  const dd=$(_DD_MAP[inputId]);
+  if(!dd||!dd.classList.contains('open')){
+    if(e.key==='Escape'){hideDD(inputId);e.target.blur();}
+    return;
+  }
+  const items=[...dd.querySelectorAll('.srch-dd-item[data-val]')];
+  let idx=_ddHovIdx[inputId]??-1;
+  if(e.key==='ArrowDown'){
+    e.preventDefault();idx=Math.min(idx+1,items.length-1);hovDD(inputId,idx);
+    items[idx]?.scrollIntoView({block:'nearest'});
+  }else if(e.key==='ArrowUp'){
+    e.preventDefault();idx=Math.max(idx-1,0);hovDD(inputId,idx);
+    items[idx]?.scrollIntoView({block:'nearest'});
+  }else if(e.key==='Enter'||e.key==='Tab'){
+    if(idx>=0&&items[idx]){
+      e.preventDefault();
+      const val=items[idx].getAttribute('data-val');
+      const inp=$(inputId);if(inp)inp.value=val;
+      if(inputId==='srchCustomer')S.srchCustomer=val;
+      else if(inputId==='srchResponsible')S.srchResponsible=val;
+      else if(inputId==='srchCrmId')S.srchCrmId=val;
+      hideDD(inputId);syncSearchUI();updateAll();
+    }else{
+      hideDD(inputId);onSearch();
+    }
+  }else if(e.key==='Escape'){
+    hideDD(inputId);e.target.blur();
+  }
+}
+
+// Close dropdowns when clicking outside any search box
+document.addEventListener('mousedown',e=>{
+  if(!e.target.closest('.srch-box'))hideAllDD();
+});
 
 // DRILL DOWN
 function openDrill(type,val){
@@ -3911,4 +4436,4 @@ updateAll();
 </script>
 
 
-<div id="ghToast" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgb(0, 42, 134); color: rgb(255, 255, 255); padding: 9px 20px; border-radius: 20px; font-size: 12px; font-weight: 500; z-index: 600; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; opacity: 1; transition: opacity 0.2s; pointer-events: none;">✓ Dashboard committed to GitHub!</div></body></html>
+<div id="ghToast" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgb(0, 42, 134); color: rgb(255, 255, 255); padding: 9px 20px; border-radius: 20px; font-size: 12px; font-weight: 500; z-index: 600; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 16px; opacity: 1; transition: opacity 0.2s; pointer-events: none;">✓ 228 customers loaded — dashboard refreshed!</div></body></html>
