@@ -1,6 +1,6 @@
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>APAC GA Movement Tracker — 2026-11-26 02:34 UTC</title>
+<title>APAC GA Movement Tracker — 2026-11-26 02:55 UTC</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -70,7 +70,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 .f-clear:hover{background:#B91C1C;box-shadow:0 2px 6px rgba(185,28,28,.35)}
 
 /* SEL BAR */
-.sel-bar{display:none;background:var(--b2);border:1px solid var(--b4);border-radius:7px;padding:6px 12px;margin-bottom:12px;font-size:11.5px;color:var(--b10);align-items:center;gap:7px;flex-wrap:wrap}
+.sel-bar{display:none;background:#EBF5FF;border-top:2px solid var(--b4);padding:5px 24px;font-size:11.5px;color:var(--b10);align-items:center;gap:6px;flex-wrap:wrap}
 .sel-bar.show{display:flex}
 .sel-tag{background:var(--b7);color:#fff;padding:2px 7px;border-radius:9px;font-size:11px;display:flex;align-items:center;gap:4px}
 .sel-tag button{background:none;border:none;color:rgba(255,255,255,.8);cursor:pointer;padding:0;font-size:12px;line-height:1}
@@ -223,6 +223,9 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 .star-btn.starred{color:#E87E04}
 .chip.mark-chip{border-color:#E87E04;color:#E87E04;background:#fff}
 .chip.mark-chip.active{background:#E87E04;border-color:#E87E04;color:#fff}
+/* MU chips — teal/cyan color scheme */
+.mu-chip{border-color:#0891B2;color:#0891B2;font-weight:500}
+.mu-chip.active{background:#0891B2;border-color:#0891B2;color:#fff}
 /* EA BY PHASE */
 .ea-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--gl)}
 .ea-row:last-child{border-bottom:none}
@@ -401,7 +404,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px">
-    <a href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker" target="_blank" style="background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.35); color: rgb(255, 255, 255); font-size: 11px; padding: 5px 13px; border-radius: 14px; text-decoration: none; white-space: nowrap; transition: background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
+    <a href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker" target="_blank" style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;font-size:11px;padding:5px 13px;border-radius:14px;text-decoration:none;white-space:nowrap;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.28)'" onmouseout="this.style.background='rgba(255,255,255,.18)'">
       Global GA Tracker ↗
     </a>
     <div class="hdr-badge" id="hdrBadge">CW 47 · 144 customers</div>
@@ -414,14 +417,18 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 
 <!-- FILTER BAR -->
 <div class="fb">
+  <!-- ROW 1: Market Unit (front, distinct teal colour) -->
+  <div class="fb-row">
+    <span class="fl" style="flex-shrink:0;font-weight:600">Market Unit</span>
+    <div class="chips" id="muChips"><span class="chip mu-chip active" onclick="toggleMU('APAC Region',event)" title="All markets">APAC Region</span><span class="chip mu-chip" onclick="toggleMU('ANZ',event)" title="Click to select, Ctrl+Click for multi-select">ANZ</span><span class="chip mu-chip" onclick="toggleMU('G.China',event)" title="Click to select, Ctrl+Click for multi-select">G.China</span><span class="chip mu-chip" onclick="toggleMU('India',event)" title="Click to select, Ctrl+Click for multi-select">India</span><span class="chip mu-chip" onclick="toggleMU('Japan',event)" title="Click to select, Ctrl+Click for multi-select">Japan</span><span class="chip mu-chip" onclick="toggleMU('Korea',event)" title="Click to select, Ctrl+Click for multi-select">Korea</span><span class="chip mu-chip" onclick="toggleMU('South East Asia',event)" title="Click to select, Ctrl+Click for multi-select">South East Asia</span></div>
+  </div>
+  <!-- ROW 2: CW filters + Role + Status + Clear (rightmost) -->
   <div class="fb-row">
     <div class="fg"><span class="fl">Up to CW</span>
       <select class="fsel" id="cwSel" onchange="onCWChange()"><option value="ALL">All CWs</option><option value="CW 44">CW 44</option><option value="CW 45">CW 45</option><option value="CW 46">CW 46</option><option value="CW 47" selected="">CW 47</option><option value="NA">N/A only</option></select>
     </div>
     <div class="fsep"></div>
     <div class="fg"><span class="fl">Specific CW</span><div class="chips" id="filterCWChips"><span class="chip active" onclick="toggleFilterCW('All')">All</span><span class="chip" onclick="toggleFilterCW('CW 44')">CW 44</span><span class="chip" onclick="toggleFilterCW('CW 45')">CW 45</span><span class="chip" onclick="toggleFilterCW('CW 46')">CW 46</span><span class="chip" onclick="toggleFilterCW('CW 47')">CW 47</span></div></div>
-    <div class="fsep"></div>
-    <div class="fg"><span class="fl">Market Unit</span><div class="chips" id="muChips"><span class="chip active" onclick="toggleMU('All',event)" title="Clear">All</span><span class="chip" onclick="toggleMU('ANZ',event)" title="Click to select, Ctrl+Click for multi-select">ANZ</span><span class="chip" onclick="toggleMU('G.China',event)" title="Click to select, Ctrl+Click for multi-select">G.China</span><span class="chip" onclick="toggleMU('India',event)" title="Click to select, Ctrl+Click for multi-select">India</span><span class="chip" onclick="toggleMU('Japan',event)" title="Click to select, Ctrl+Click for multi-select">Japan</span><span class="chip" onclick="toggleMU('Korea',event)" title="Click to select, Ctrl+Click for multi-select">Korea</span><span class="chip" onclick="toggleMU('South East Asia',event)" title="Click to select, Ctrl+Click for multi-select">South East Asia</span></div></div>
     <div class="fsep"></div>
     <div class="fg"><span class="fl">Role</span>
       <div class="role-dd">
@@ -439,7 +446,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
     </div>
     <div class="fsep"></div>
     <div class="fg"><span class="fl">Status</span><div class="chips" id="statusChips"><span class="chip active" onclick="toggleStatus('All')">All</span><span class="chip" onclick="toggleStatus('Active')">Active</span><span class="chip" onclick="toggleStatus('Dropped Out')">Dropped Out</span></div></div>
-    <div class="fsep"></div>
+    <div style="flex:1"></div><!-- push Clear to right edge -->
     <button class="f-clear" onclick="clearAllFilters()">✕ Clear all filters</button>
   </div>
   <div class="fb-row">
@@ -458,8 +465,8 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <div class="srch-box" id="srchBoxCustomer">
         <span class="srch-icon">🔍</span>
         <input class="srch-inp" id="srchCustomer" placeholder="Customer Name" oninput="onSearch();showDD('srchCustomer','customer')" onfocus="showDD('srchCustomer','customer')" onkeydown="handleSearchKey(event,'srchCustomer')" autocomplete="off">
-        <button class="srch-clr" id="srchCustomerClr" onclick="clearSearch('srchCustomer')" style="display: none;">✕</button>
-        <div class="srch-dd" id="ddCustomer"><div class="srch-dd-item" data-val="CJ Foodville Corp." data-idx="0" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',0)">CJ <mark>Food</mark>ville Corp.</div><div class="srch-dd-item" data-val="Foodstuffs North Island Limited" data-idx="1" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',1)"><mark>Food</mark>stuffs North Island Limited</div><div class="srch-dd-item" data-val="Foodstuffs South Island Limited" data-idx="2" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',2)"><mark>Food</mark>stuffs South Island Limited</div><div class="srch-dd-item" data-val="George Weston Foods Limited" data-idx="3" onmousedown="pickDD(event,'srchCustomer')" onmouseover="hovDD('srchCustomer',3)">George Weston <mark>Food</mark>s Limited</div></div>
+        <button class="srch-clr" id="srchCustomerClr" onclick="clearSearch('srchCustomer')" style="display:none">✕</button>
+        <div class="srch-dd" id="ddCustomer"></div>
       </div>
 
       <div class="srch-box" id="srchBoxResponsible">
@@ -478,14 +485,16 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 
     </div>
   </div>
-</div>
+
+  <!-- Active selection row — inside sticky .fb so always visible below filters -->
+  <div class="sel-bar" id="selBar">
+    <span style="font-weight:600;font-size:11px;white-space:nowrap">Active selection:</span>
+    <span id="selTags" style="display:flex;flex-wrap:wrap;gap:5px;flex:1"></span>
+    <span class="sel-clear" onclick="clearSel()" style="margin-left:auto;white-space:nowrap">✕ Clear selections</span>
+  </div>
+</div><!-- end .fb -->
 
 <div class="content">
-  <div class="sel-bar" id="selBar">
-    <span style="font-weight:500">Active selection:</span>
-    <span id="selTags"><span class="sel-tag">CW: CW 45<button onclick="window._sc[0]()">×</button></span></span>
-    <span class="sel-clear" onclick="clearSel()">Clear</span>
-  </div>
 
   <div class="kpi-row">
     <div class="kpi navy"><div class="kpi-lbl">In Scope</div><div class="kpi-val" id="kTot">144</div><div class="kpi-desc" id="kTotS">of 228 total (63%)</div></div>
@@ -1106,7 +1115,7 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <thead><tr>
         <th style="width:36px">★</th>
         <th style="width:80px;cursor:pointer;white-space:nowrap;user-select:none" onclick="tblSortBy('crmId')">CRM ID<span style="color:var(--gl);font-size:9px"> ⇅</span></th>
-        <th style="width:20%;cursor:pointer;white-space:nowrap;user-select:none" onclick="tblSortBy('customer')">Customer<span style="color:var(--b7);font-size:9px"> ▲</span></th>
+        <th style="width:20%;cursor:pointer;white-space:nowrap;user-select:none" onclick="tblSortBy('customer')">Customer<span style="color:var(--gl);font-size:9px"> ⇅</span></th>
         <th style="width:75px;cursor:pointer;white-space:nowrap;user-select:none" onclick="tblSortBy('mu')">MU<span style="color:var(--gl);font-size:9px"> ⇅</span></th>
         <th style="width:16%;cursor:pointer;white-space:nowrap;user-select:none" onclick="tblSortBy('phase')">Phase<span style="color:var(--gl);font-size:9px"> ⇅</span></th>
         <th style="width:50px;cursor:pointer;white-space:nowrap;user-select:none" onclick="tblSortBy('step')">Stage<span style="color:var(--gl);font-size:9px"> ⇅</span></th>
@@ -1150,23 +1159,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005349508" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0050736873')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0050736873" onclick="toggleMark('0050736873')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0050736873</td>
-      <td style="width:20%">Alisoft China Holding Limited</td>
-      <td style="width:75px">G.China</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Stanley Xie</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050736873" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0001191375')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -1218,40 +1210,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0018228791" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0004029398')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0004029398" onclick="toggleMark('0004029398')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0004029398</td>
-      <td style="width:20%">ASM Front-End Manufacturing Singapore</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">TQM</td>
-      <td style="width:13%;color:var(--gd)">Pushpa Sathasivam; Satyya Sundar Akkinapragada</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004029398" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0003180466')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0003180466" onclick="toggleMark('0003180466')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0003180466</td>
-      <td style="width:20%">ASPN CO.,LTD.</td>
-      <td style="width:75px">Korea</td>
-      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
-      <td style="width:50px;color:var(--gd)">Step 7</td>
-      <td style="width:65px;color:var(--gd)">CA</td>
-      <td style="width:13%;color:var(--gd)">Yang Jee Hye</td>
-      <td style="width:60px;color:var(--gd)"> Priority 2</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003180466" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0010390071')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -1389,40 +1347,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001127046" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0000032429')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0000032429" onclick="toggleMark('0000032429')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0000032429</td>
-      <td style="width:20%">Brunei Shell Petroleum Company Sdn Bhd</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Reagan Chan</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0000032429" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001107564')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001107564" onclick="toggleMark('0001107564')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001107564</td>
-      <td style="width:20%">Celcom Berhad</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">CSM - HCM</td>
-      <td style="width:13%;color:var(--gd)">Renjith Nair</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 44</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001107564" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0010141078')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0010141078" onclick="toggleMark('0010141078')" title="Mark as priority">★</button>
@@ -1525,23 +1449,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001119130" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0004719094')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0004719094" onclick="toggleMark('0004719094')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0004719094</td>
-      <td style="width:20%">Department of Transport and Main Roads</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Alan Beven</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004719094" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0050479516')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0050479516" onclick="toggleMark('0050479516')" title="Mark as priority">★</button>
@@ -1576,23 +1483,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0027691338" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0001101941')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001101941" onclick="toggleMark('0001101941')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001101941</td>
-      <td style="width:20%">EMPLOYEES PROVIDENT FUND BOARD</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Quan Nguyen; Emil Farkhan</td>
-      <td style="width:60px;color:var(--gd)"> Priority 2</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001101941" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001171211')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0001171211" onclick="toggleMark('0001171211')" title="Mark as priority">★</button>
@@ -1626,23 +1516,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001206658" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001229975')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001229975" onclick="toggleMark('0001229975')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001229975</td>
-      <td style="width:20%">Foodstuffs South Island Limited</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Chandra Shekhar Singh</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001229975" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0050775703')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -1694,40 +1567,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004900229" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001162655')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001162655" onclick="toggleMark('0001162655')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001162655</td>
-      <td style="width:20%">Gamuda Berhad</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">Spend CSM</td>
-      <td style="width:13%;color:var(--gd)">Eva Cheok Yeok Hua</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001162655" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0003114817')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0003114817" onclick="toggleMark('0003114817')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0003114817</td>
-      <td style="width:20%">GIC Private Limited</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">HCM CSM</td>
-      <td style="width:13%;color:var(--gd)">Nicole Lim</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 44</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003114817" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0004941871')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -1916,23 +1755,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001099349" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0002637127')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0002637127" onclick="toggleMark('0002637127')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0002637127</td>
-      <td style="width:20%">John Keells Holdings PLC</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P5" style="font-size:9px">P5</span> <span style="color:var(--gd)">Productization &amp; Consumption</span></td>
-      <td style="width:50px;color:var(--gd)">Step 12</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Ramanujam B R</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0002637127" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0005555516')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0005555516" onclick="toggleMark('0005555516')" title="Mark as priority">★</button>
@@ -2018,23 +1840,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001166914" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0001142864')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001142864" onclick="toggleMark('0001142864')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001142864</td>
-      <td style="width:20%">Kuok (Singapore) Limited</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Carola Tiefenthaler</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001142864" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001155523')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0001155523" onclick="toggleMark('0001155523')" title="Mark as priority">★</button>
@@ -2051,23 +1856,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001155523" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0005526959')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0005526959" onclick="toggleMark('0005526959')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0005526959</td>
-      <td style="width:20%">Lee Kum Kee International Holdings Ltd</td>
-      <td style="width:75px">G.China</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Ting Zhou; Paul Kwok</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005526959" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0001943721')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -2154,23 +1942,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001117701" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0007252500')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0007252500" onclick="toggleMark('0007252500')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0007252500</td>
-      <td style="width:20%">Lion Pty Ltd</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Cornelis Laurens Oversier</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0007252500" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001155529')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn starred" data-crmid="0001155529" onclick="toggleMark('0001155529')" title="Unmark priority">★</button>
@@ -2187,23 +1958,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001155529" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0011396304')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0011396304" onclick="toggleMark('0011396304')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0011396304</td>
-      <td style="width:20%">LX Hausys, Ltd.</td>
-      <td style="width:75px">Korea</td>
-      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
-      <td style="width:50px;color:var(--gd)">Step 7</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Cheolmin Lim; Seo Hyun Jung</td>
-      <td style="width:60px;color:var(--gd)"> Priority 2</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0011396304" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0006133604')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -2256,23 +2010,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001231877" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0001147996')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001147996" onclick="toggleMark('0001147996')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001147996</td>
-      <td style="width:20%">Medibank Private Limited</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">SAP SuccessFactors CSM</td>
-      <td style="width:13%;color:var(--gd)">Madeleine Walsh</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001147996" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0026049823')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0026049823" onclick="toggleMark('0026049823')" title="Mark as priority">★</button>
@@ -2289,57 +2026,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0026049823" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001210296')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001210296" onclick="toggleMark('0001210296')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001210296</td>
-      <td style="width:20%">Mitre 10 (New Zealand) Limited</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Chandra Shekhar Singh</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001210296" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001086748')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001086748" onclick="toggleMark('0001086748')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001086748</td>
-      <td style="width:20%">National University of Singapore</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Akash Nambiar</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001086748" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0011932698')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0011932698" onclick="toggleMark('0011932698')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0011932698</td>
-      <td style="width:20%">NEC Corporation</td>
-      <td style="width:75px">Japan</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Rena Shoji; Yasuko Sekiguchi</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 44</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0011932698" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0002653695')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -2477,23 +2163,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001093006" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0003255937')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0003255937" onclick="toggleMark('0003255937')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0003255937</td>
-      <td style="width:20%">Page Industries Limited</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
-      <td style="width:50px;color:var(--gd)">Step 8</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">EA: Devesh Thakur</td>
-      <td style="width:60px;color:var(--gd)"> Priority 2</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003255937" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0019380641')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn starred" data-crmid="0019380641" onclick="toggleMark('0019380641')" title="Unmark priority">★</button>
@@ -2527,40 +2196,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-d"></span>Dropped Out</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0006654823" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001095500')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001095500" onclick="toggleMark('0001095500')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001095500</td>
-      <td style="width:20%">Perusahaan Otomobil Nasional Sdn Bhd</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Reagan Chan</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001095500" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0050169075')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0050169075" onclick="toggleMark('0050169075')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0050169075</td>
-      <td style="width:20%">PetroChina Investment(Hong Kong) Limited</td>
-      <td style="width:75px">G.China</td>
-      <td style="width:16%"><span class="pt pt-P5" style="font-size:9px">P5</span> <span style="color:var(--gd)">Productization &amp; Consumption</span></td>
-      <td style="width:50px;color:var(--gd)">Step 13</td>
-      <td style="width:65px;color:var(--gd)">CSM Finance</td>
-      <td style="width:13%;color:var(--gd)">Julia Lu</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050169075" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0002086326')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -2613,40 +2248,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001187235" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0005137940')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0005137940" onclick="toggleMark('0005137940')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0005137940</td>
-      <td style="width:20%">PT Pamapersada Nusantara</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Febry Putro</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005137940" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0050726863')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0050726863" onclick="toggleMark('0050726863')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0050726863</td>
-      <td style="width:20%">PT PARAGON UNIVERSA UTAMA</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Hasan Ali</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050726863" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001092862')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0001092862" onclick="toggleMark('0001092862')" title="Mark as priority">★</button>
@@ -2697,23 +2298,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001094368" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0003860293')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0003860293" onclick="toggleMark('0003860293')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0003860293</td>
-      <td style="width:20%">RGE Pte. Ltd.</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Carola Tiefenthaler</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003860293" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0001244061')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -2766,57 +2350,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003740766" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0013963761')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0013963761" onclick="toggleMark('0013963761')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0013963761</td>
-      <td style="width:20%">Samvardhana Motherson</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P4" style="font-size:9px">P4</span> <span style="color:var(--gd)">Optimize &amp; Scale</span></td>
-      <td style="width:50px;color:var(--gd)">Step 9</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Swati Saxena</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0013963761" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001099481')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001099481" onclick="toggleMark('0001099481')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001099481</td>
-      <td style="width:20%">Santos Ltd</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Ava Kodeiri</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001099481" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0003227651')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0003227651" onclick="toggleMark('0003227651')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0003227651</td>
-      <td style="width:20%">Sarawak Energy Berhad</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">Spend CSM</td>
-      <td style="width:13%;color:var(--gd)">Eva Cheok</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003227651" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001219252')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0001219252" onclick="toggleMark('0001219252')" title="Mark as priority">★</button>
@@ -2850,23 +2383,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0010834527" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001237326')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001237326" onclick="toggleMark('0001237326')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001237326</td>
-      <td style="width:20%">Singapore Aero Engine Services Private Limited</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
-      <td style="width:50px;color:var(--gd)">Step 7</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Sai Jaganath Ramisetti; Nicole Lim</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001237326" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0001176870')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -2936,23 +2452,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001094089" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0021785711')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0021785711" onclick="toggleMark('0021785711')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0021785711</td>
-      <td style="width:20%">South32 Group Operations Pty Ltd</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Ross Robertson</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0021785711" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0024951532')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0024951532" onclick="toggleMark('0024951532')" title="Mark as priority">★</button>
@@ -3021,23 +2520,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0038209709" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0002086330')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0002086330" onclick="toggleMark('0002086330')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0002086330</td>
-      <td style="width:20%">Tata AIG General Insurance</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">HCM CSM</td>
-      <td style="width:13%;color:var(--gd)">Divya Kapoor</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0002086330" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001139577')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0001139577" onclick="toggleMark('0001139577')" title="Mark as priority">★</button>
@@ -3089,23 +2571,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050841017" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0001130632')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001130632" onclick="toggleMark('0001130632')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001130632</td>
-      <td style="width:20%">Tata Motors Limited</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 6</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Nitin Shah</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 44</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001130632" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0001111715')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0001111715" onclick="toggleMark('0001111715')" title="Mark as priority">★</button>
@@ -3122,40 +2587,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001111715" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001250893')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001250893" onclick="toggleMark('0001250893')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001250893</td>
-      <td style="width:20%">Technological Resources Pty Ltd</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Ava Shabani</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001250893" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0004412571')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0004412571" onclick="toggleMark('0004412571')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0004412571</td>
-      <td style="width:20%">Thai Airways International</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Kannika Suwanphibun</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004412571" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0003620639')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -3190,23 +2621,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001110733" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001211800')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001211800" onclick="toggleMark('0001211800')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001211800</td>
-      <td style="width:20%">The Tata Power Company Limited</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 4</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Pulkit Joshi</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 45</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001211800" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0004711110')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -3275,40 +2689,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050732750" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001098986')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001098986" onclick="toggleMark('0001098986')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001098986</td>
-      <td style="width:20%">TOYOTA MOTOR CORPORATION</td>
-      <td style="width:75px">Japan</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 6</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Takeshi Nakamura</td>
-      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
-      <td style="width:48px">CW 44</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001098986" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001161466')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn starred" data-crmid="0001161466" onclick="toggleMark('0001161466')" title="Unmark priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001161466</td>
-      <td style="width:20%">Trent Limited</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
-      <td style="width:50px;color:var(--gd)">Step 7</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Devesh Thakur</td>
-      <td style="width:60px;color:var(--gd)"> Priority 2</td>
-      <td style="width:48px">CW 46</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001161466" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0050743671')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -3412,23 +2792,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001193221" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0010299995')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0010299995" onclick="toggleMark('0010299995')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0010299995</td>
-      <td style="width:20%">Vietnam Technological &amp; Commercial Joint Stock Bank (TECHCOMBANK)</td>
-      <td style="width:75px">South East Asia</td>
-      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
-      <td style="width:50px;color:var(--gd)">Step 5</td>
-      <td style="width:65px;color:var(--gd)">HCM CSM</td>
-      <td style="width:13%;color:var(--gd)">Khoa Nguyen - SAP</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0010299995" target="_blank">See Playbook ↗</a>
-      </td>
     </tr><tr onclick="openDrill('cust','0014381169')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
         <button class="star-btn" data-crmid="0014381169" onclick="toggleMark('0014381169')" title="Mark as priority">★</button>
@@ -3445,6 +2808,550 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0014381169" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001176119')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001176119" onclick="toggleMark('0001176119')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001176119</td>
+      <td style="width:20%">Wockhardt Limited</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P1" style="font-size:9px">P1</span> <span style="color:var(--gd)">CW Qualified &amp; Positioned</span></td>
+      <td style="width:50px;color:var(--gd)">Step 1</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Shubham Srivastava</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001176119" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0000956389')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0000956389" onclick="toggleMark('0000956389')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0000956389</td>
+      <td style="width:20%">Zespri Group Limited</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P1" style="font-size:9px">P1</span> <span style="color:var(--gd)">CW Qualified &amp; Positioned</span></td>
+      <td style="width:50px;color:var(--gd)">Step 3</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Craig Lyall</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0000956389" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0050736873')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0050736873" onclick="toggleMark('0050736873')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0050736873</td>
+      <td style="width:20%">Alisoft China Holding Limited</td>
+      <td style="width:75px">G.China</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Stanley Xie</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050736873" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0004029398')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0004029398" onclick="toggleMark('0004029398')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0004029398</td>
+      <td style="width:20%">ASM Front-End Manufacturing Singapore</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">TQM</td>
+      <td style="width:13%;color:var(--gd)">Pushpa Sathasivam; Satyya Sundar Akkinapragada</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004029398" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0000032429')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0000032429" onclick="toggleMark('0000032429')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0000032429</td>
+      <td style="width:20%">Brunei Shell Petroleum Company Sdn Bhd</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Reagan Chan</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0000032429" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001107564')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001107564" onclick="toggleMark('0001107564')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001107564</td>
+      <td style="width:20%">Celcom Berhad</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">CSM - HCM</td>
+      <td style="width:13%;color:var(--gd)">Renjith Nair</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 44</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001107564" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0004719094')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0004719094" onclick="toggleMark('0004719094')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0004719094</td>
+      <td style="width:20%">Department of Transport and Main Roads</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Alan Beven</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004719094" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001101941')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001101941" onclick="toggleMark('0001101941')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001101941</td>
+      <td style="width:20%">EMPLOYEES PROVIDENT FUND BOARD</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Quan Nguyen; Emil Farkhan</td>
+      <td style="width:60px;color:var(--gd)"> Priority 2</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001101941" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001229975')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001229975" onclick="toggleMark('0001229975')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001229975</td>
+      <td style="width:20%">Foodstuffs South Island Limited</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Chandra Shekhar Singh</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001229975" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001162655')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001162655" onclick="toggleMark('0001162655')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001162655</td>
+      <td style="width:20%">Gamuda Berhad</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">Spend CSM</td>
+      <td style="width:13%;color:var(--gd)">Eva Cheok Yeok Hua</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001162655" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0003114817')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0003114817" onclick="toggleMark('0003114817')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0003114817</td>
+      <td style="width:20%">GIC Private Limited</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">HCM CSM</td>
+      <td style="width:13%;color:var(--gd)">Nicole Lim</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 44</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003114817" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001142864')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001142864" onclick="toggleMark('0001142864')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001142864</td>
+      <td style="width:20%">Kuok (Singapore) Limited</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Carola Tiefenthaler</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001142864" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0005526959')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0005526959" onclick="toggleMark('0005526959')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0005526959</td>
+      <td style="width:20%">Lee Kum Kee International Holdings Ltd</td>
+      <td style="width:75px">G.China</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Ting Zhou; Paul Kwok</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005526959" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0007252500')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0007252500" onclick="toggleMark('0007252500')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0007252500</td>
+      <td style="width:20%">Lion Pty Ltd</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Cornelis Laurens Oversier</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0007252500" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001147996')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001147996" onclick="toggleMark('0001147996')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001147996</td>
+      <td style="width:20%">Medibank Private Limited</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">SAP SuccessFactors CSM</td>
+      <td style="width:13%;color:var(--gd)">Madeleine Walsh</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001147996" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001210296')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001210296" onclick="toggleMark('0001210296')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001210296</td>
+      <td style="width:20%">Mitre 10 (New Zealand) Limited</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Chandra Shekhar Singh</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001210296" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001086748')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001086748" onclick="toggleMark('0001086748')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001086748</td>
+      <td style="width:20%">National University of Singapore</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Akash Nambiar</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001086748" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0011932698')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0011932698" onclick="toggleMark('0011932698')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0011932698</td>
+      <td style="width:20%">NEC Corporation</td>
+      <td style="width:75px">Japan</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Rena Shoji; Yasuko Sekiguchi</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 44</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0011932698" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001095500')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001095500" onclick="toggleMark('0001095500')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001095500</td>
+      <td style="width:20%">Perusahaan Otomobil Nasional Sdn Bhd</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Reagan Chan</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001095500" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0005137940')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0005137940" onclick="toggleMark('0005137940')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0005137940</td>
+      <td style="width:20%">PT Pamapersada Nusantara</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Febry Putro</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0005137940" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0050726863')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0050726863" onclick="toggleMark('0050726863')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0050726863</td>
+      <td style="width:20%">PT PARAGON UNIVERSA UTAMA</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Hasan Ali</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050726863" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0003860293')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0003860293" onclick="toggleMark('0003860293')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0003860293</td>
+      <td style="width:20%">RGE Pte. Ltd.</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Carola Tiefenthaler</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003860293" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001099481')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001099481" onclick="toggleMark('0001099481')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001099481</td>
+      <td style="width:20%">Santos Ltd</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Ava Kodeiri</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001099481" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0003227651')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0003227651" onclick="toggleMark('0003227651')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0003227651</td>
+      <td style="width:20%">Sarawak Energy Berhad</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">Spend CSM</td>
+      <td style="width:13%;color:var(--gd)">Eva Cheok</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003227651" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0021785711')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0021785711" onclick="toggleMark('0021785711')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0021785711</td>
+      <td style="width:20%">South32 Group Operations Pty Ltd</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Ross Robertson</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0021785711" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0002086330')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0002086330" onclick="toggleMark('0002086330')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0002086330</td>
+      <td style="width:20%">Tata AIG General Insurance</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">HCM CSM</td>
+      <td style="width:13%;color:var(--gd)">Divya Kapoor</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0002086330" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001130632')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001130632" onclick="toggleMark('0001130632')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001130632</td>
+      <td style="width:20%">Tata Motors Limited</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 6</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Nitin Shah</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 44</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001130632" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001250893')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001250893" onclick="toggleMark('0001250893')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001250893</td>
+      <td style="width:20%">Technological Resources Pty Ltd</td>
+      <td style="width:75px">ANZ</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Ava Shabani</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001250893" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0004412571')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0004412571" onclick="toggleMark('0004412571')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0004412571</td>
+      <td style="width:20%">Thai Airways International</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Kannika Suwanphibun</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0004412571" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001211800')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0001211800" onclick="toggleMark('0001211800')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001211800</td>
+      <td style="width:20%">The Tata Power Company Limited</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 4</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Pulkit Joshi</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001211800" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001098986')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001098986" onclick="toggleMark('0001098986')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001098986</td>
+      <td style="width:20%">TOYOTA MOTOR CORPORATION</td>
+      <td style="width:75px">Japan</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 6</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Takeshi Nakamura</td>
+      <td style="width:60px;color:var(--gd)"><span style="color:#E87E04">★</span> Top 100</td>
+      <td style="width:48px">CW 44</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001098986" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0010299995')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0010299995" onclick="toggleMark('0010299995')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0010299995</td>
+      <td style="width:20%">Vietnam Technological &amp; Commercial Joint Stock Bank (TECHCOMBANK)</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P2" style="font-size:9px">P2</span> <span style="color:var(--gd)">Prepare &amp; Prerequisites</span></td>
+      <td style="width:50px;color:var(--gd)">Step 5</td>
+      <td style="width:65px;color:var(--gd)">HCM CSM</td>
+      <td style="width:13%;color:var(--gd)">Khoa Nguyen - SAP</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 47</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0010299995" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0001143356')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -3479,23 +3386,6 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050005208" target="_blank">See Playbook ↗</a>
-      </td>
-    </tr><tr onclick="openDrill('cust','0001176119')">
-      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0001176119" onclick="toggleMark('0001176119')" title="Mark as priority">★</button>
-      </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0001176119</td>
-      <td style="width:20%">Wockhardt Limited</td>
-      <td style="width:75px">India</td>
-      <td style="width:16%"><span class="pt pt-P1" style="font-size:9px">P1</span> <span style="color:var(--gd)">CW Qualified &amp; Positioned</span></td>
-      <td style="width:50px;color:var(--gd)">Step 1</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Shubham Srivastava</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
-      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
-      <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001176119" target="_blank">See Playbook ↗</a>
       </td>
     </tr><tr onclick="openDrill('cust','0000032377')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
@@ -3548,22 +3438,141 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
       <td style="width:88px" onclick="event.stopPropagation()">
         <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050623409" target="_blank">See Playbook ↗</a>
       </td>
-    </tr><tr onclick="openDrill('cust','0000956389')">
+    </tr><tr onclick="openDrill('cust','0003180466')">
       <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
-        <button class="star-btn" data-crmid="0000956389" onclick="toggleMark('0000956389')" title="Mark as priority">★</button>
+        <button class="star-btn" data-crmid="0003180466" onclick="toggleMark('0003180466')" title="Mark as priority">★</button>
       </td>
-      <td style="width:80px;color:var(--gm);font-size:10px">0000956389</td>
-      <td style="width:20%">Zespri Group Limited</td>
-      <td style="width:75px">ANZ</td>
-      <td style="width:16%"><span class="pt pt-P1" style="font-size:9px">P1</span> <span style="color:var(--gd)">CW Qualified &amp; Positioned</span></td>
-      <td style="width:50px;color:var(--gd)">Step 3</td>
-      <td style="width:65px;color:var(--gd)">EA</td>
-      <td style="width:13%;color:var(--gd)">Craig Lyall</td>
-      <td style="width:60px;color:var(--gd)"> Other</td>
-      <td style="width:48px">CW 47</td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0003180466</td>
+      <td style="width:20%">ASPN CO.,LTD.</td>
+      <td style="width:75px">Korea</td>
+      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
+      <td style="width:50px;color:var(--gd)">Step 7</td>
+      <td style="width:65px;color:var(--gd)">CA</td>
+      <td style="width:13%;color:var(--gd)">Yang Jee Hye</td>
+      <td style="width:60px;color:var(--gd)"> Priority 2</td>
+      <td style="width:48px">CW 46</td>
       <td style="width:60px"><span class="sd sd-a"></span>Active</td>
       <td style="width:88px" onclick="event.stopPropagation()">
-        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0000956389" target="_blank">See Playbook ↗</a>
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003180466" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0011396304')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0011396304" onclick="toggleMark('0011396304')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0011396304</td>
+      <td style="width:20%">LX Hausys, Ltd.</td>
+      <td style="width:75px">Korea</td>
+      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
+      <td style="width:50px;color:var(--gd)">Step 7</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Cheolmin Lim; Seo Hyun Jung</td>
+      <td style="width:60px;color:var(--gd)"> Priority 2</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0011396304" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0003255937')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0003255937" onclick="toggleMark('0003255937')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0003255937</td>
+      <td style="width:20%">Page Industries Limited</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
+      <td style="width:50px;color:var(--gd)">Step 8</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">EA: Devesh Thakur</td>
+      <td style="width:60px;color:var(--gd)"> Priority 2</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0003255937" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001237326')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001237326" onclick="toggleMark('0001237326')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001237326</td>
+      <td style="width:20%">Singapore Aero Engine Services Private Limited</td>
+      <td style="width:75px">South East Asia</td>
+      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
+      <td style="width:50px;color:var(--gd)">Step 7</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Sai Jaganath Ramisetti; Nicole Lim</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001237326" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0001161466')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn starred" data-crmid="0001161466" onclick="toggleMark('0001161466')" title="Unmark priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0001161466</td>
+      <td style="width:20%">Trent Limited</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P3" style="font-size:9px">P3</span> <span style="color:var(--gd)">Plan &amp; Activate</span></td>
+      <td style="width:50px;color:var(--gd)">Step 7</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Devesh Thakur</td>
+      <td style="width:60px;color:var(--gd)"> Priority 2</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001161466" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0013963761')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0013963761" onclick="toggleMark('0013963761')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0013963761</td>
+      <td style="width:20%">Samvardhana Motherson</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P4" style="font-size:9px">P4</span> <span style="color:var(--gd)">Optimize &amp; Scale</span></td>
+      <td style="width:50px;color:var(--gd)">Step 9</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Swati Saxena</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0013963761" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0002637127')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0002637127" onclick="toggleMark('0002637127')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0002637127</td>
+      <td style="width:20%">John Keells Holdings PLC</td>
+      <td style="width:75px">India</td>
+      <td style="width:16%"><span class="pt pt-P5" style="font-size:9px">P5</span> <span style="color:var(--gd)">Productization &amp; Consumption</span></td>
+      <td style="width:50px;color:var(--gd)">Step 12</td>
+      <td style="width:65px;color:var(--gd)">EA</td>
+      <td style="width:13%;color:var(--gd)">Ramanujam B R</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 45</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0002637127" target="_blank">See Playbook ↗</a>
+      </td>
+    </tr><tr onclick="openDrill('cust','0050169075')">
+      <td style="width:36px;text-align:center" onclick="event.stopPropagation()">
+        <button class="star-btn" data-crmid="0050169075" onclick="toggleMark('0050169075')" title="Mark as priority">★</button>
+      </td>
+      <td style="width:80px;color:var(--gm);font-size:10px">0050169075</td>
+      <td style="width:20%">PetroChina Investment(Hong Kong) Limited</td>
+      <td style="width:75px">G.China</td>
+      <td style="width:16%"><span class="pt pt-P5" style="font-size:9px">P5</span> <span style="color:var(--gd)">Productization &amp; Consumption</span></td>
+      <td style="width:50px;color:var(--gd)">Step 13</td>
+      <td style="width:65px;color:var(--gd)">CSM Finance</td>
+      <td style="width:13%;color:var(--gd)">Julia Lu</td>
+      <td style="width:60px;color:var(--gd)"> Other</td>
+      <td style="width:48px">CW 46</td>
+      <td style="width:60px"><span class="sd sd-a"></span>Active</td>
+      <td style="width:88px" onclick="event.stopPropagation()">
+        <a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0050169075" target="_blank">See Playbook ↗</a>
       </td>
     </tr></tbody>
   </table></div></div></div>
@@ -3572,33 +3581,21 @@ select.fsel.active{border-color:var(--b10);background-color:#EBF5FF;color:var(--
 
 <div class="footer">SAP Internal &nbsp;·&nbsp; Data source: GA Customers workbook &nbsp;·&nbsp; APAC only</div>
 
-<div class="dd-ov" id="ddOv" onclick="closeDrill()" style="display: none;"></div>
+<div class="dd-ov" id="ddOv" onclick="closeDrill()"></div>
 <div class="dd-pn" id="ddPn">
   <div class="dd-hdr">
-    <div><h3 id="ddTtl">CW 45 · Prepare &amp; Prerequisites — Accounts</h3><div class="dd-meta" id="ddMeta">1 customer</div></div>
+    <div><h3 id="ddTtl">Account Detail</h3><div class="dd-meta" id="ddMeta"></div></div>
     <div style="display:flex;align-items:center;gap:8px">
-      <button id="ddExportBtn" onclick="exportDrillToExcel()" style="background:#0070F2;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer">↓ Export 1 rows</button>
+      <button id="ddExportBtn" onclick="exportDrillToExcel()" style="background:#0070F2;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer">
+        ↓ Export rows
+      </button>
       <button class="dd-x" onclick="closeDrill()">✕</button>
     </div>
   </div>
   <div class="dd-body">
     <table class="dd-tbl">
-      <thead><tr><th>★</th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('crmId')">CRM ID<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('customer')">Customer<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('mu')">MU<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('phase')">Phase<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('step')">Step<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('role')">Role<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('responsible')">Responsible<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('industry')">Industry<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('priority')">Priority<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('cw')">CW<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th style="cursor:pointer;white-space:nowrap;user-select:none" onclick="ddSortBy('status')">Status<span style="color:var(--gl);font-size:9px"> ⇅</span></th><th>Playbook</th></tr></thead>
-      <tbody id="ddBody"><tr>
-      <td onclick="event.stopPropagation()"><button class="star-btn starred" data-crmid="0001250893" onclick="toggleMark('0001250893')">★</button></td>
-      <td style="color:#999;font-size:10px">0001250893</td>
-      <td style="font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis">Technological Resources Pty Ltd</td>
-      <td>ANZ</td>
-      <td><span class="pt pt-P2" style="font-size:9.5px">P2</span> <span style="color:var(--gd);font-size:10.5px">Prepare &amp; Prerequisites</span></td>
-      <td style="color:#666">Step 4</td>
-      <td style="color:#666">EA</td>
-      <td style="color:#666;max-width:130px;overflow:hidden;text-overflow:ellipsis">Ava Shabani</td>
-      <td style="color:#666">Mill Products and Mining</td>
-      <td>Other</td>
-      <td>CW 45</td>
-      <td><span class="sd sd-a"></span>Active</td>
-      <td><a class="playbook-link" href="https://customer-validation-approuter.cfapps.us10-001.hana.ondemand.com/?tab=gatracker&amp;customer=0001250893" target="_blank" onclick="event.stopPropagation()">See Playbook ↗</a></td>
-    </tr></tbody>
+      <thead><tr><th>★</th><th>CRM ID</th><th>Customer</th><th>MU</th><th>Phase</th><th>Step</th><th>Role</th><th>Responsible</th><th>Industry</th><th>Priority</th><th>CW</th><th>Status</th><th>See Playbook</th></tr></thead>
+      <tbody id="ddBody"></tbody>
     </table>
   </div>
 </div>
@@ -3866,7 +3863,8 @@ function renderWoW(){
       onClick:(e,els)=>{
         if(!els.length)return;
         const cw=cwLabels[els[0].index];
-        S.selCW=S.selCW===cw?null:cw; updateAll();
+        // Always replace — clicking any CW sets it, clicking same CW clears it
+        S.selCW=(S.selCW===cw)?null:cw; updateAll();
       },
       plugins:{
         legend:{display:false},
@@ -4451,9 +4449,9 @@ function togglePhase(p){
 
 // MU + STATUS CHIPS
 function buildChips(){
-  $('muChips').innerHTML=['All',...MUS].map(v=>{
-    const a=v==='All'?!S.mus.length:S.mus.includes(v);
-    return `<span class="chip${a?' active':''}" onclick="toggleMU('${v}',event)" title="${v==='All'?'Clear':'Click to select, Ctrl+Click for multi-select'}">${v}</span>`;
+  $('muChips').innerHTML=['APAC Region',...MUS].map(v=>{
+    const a=v==='APAC Region'?!S.mus.length:S.mus.includes(v);
+    return `<span class="chip mu-chip${a?' active':''}" onclick="toggleMU('${v}',event)" title="${v==='APAC Region'?'All markets':'Click to select, Ctrl+Click for multi-select'}">${v}</span>`;
   }).join('');
   $('statusChips').innerHTML=['All','Active','Dropped Out'].map(v=>{
     const a=v==='All'?!S.statuses.length:S.statuses.includes(v);
@@ -4461,7 +4459,7 @@ function buildChips(){
   }).join('');
 }
 function toggleMU(v,event){
-  if(v==='All'){S.mus=[];}
+  if(v==='APAC Region'||v==='All'){S.mus=[];}
   else if(event&&(event.ctrlKey||event.metaKey)){
     // Ctrl/Cmd+Click = multi-select (toggle)
     const i=S.mus.indexOf(v);i>=0?S.mus.splice(i,1):S.mus.push(v);
@@ -4476,7 +4474,8 @@ function onCWChange(){S.cwUpTo=$('cwSel').value;updateAll();}
 function toggleSelPhase(p){S.selPhase=S.selPhase===p?null:p;updateAll();}
 
 function clearAllFilters(){
-  S.mus=[];S.roleFilter=[];S.phases=[];S.statuses=[];
+  // Note: S.mus intentionally NOT reset — MU selection persists across Clear all
+  S.roleFilter=[];S.phases=[];S.statuses=[];
   S.selMU=null;S.selPhase=null;S.selCW=null;S.selRole=null;
   S.filterCW=null;S.showMarkedOnly=false;
   S.srchCustomer='';S.srchResponsible='';S.srchCrmId='';
@@ -4716,6 +4715,7 @@ function renderSelBar(){
   const bar=$('selBar');
   if(!tags.length){bar.classList.remove('show');return;}
   bar.classList.add('show');
+  // sel-bar is inside the sticky .fb — no position calculation needed
   window._sc=tags.map(t=>t.c);
   $('selTags').innerHTML=tags.map((t,i)=>`<span class="sel-tag">${t.l}<button onclick="window._sc[${i}]()">&#xd7;</button></span>`).join('');
 }
@@ -5111,6 +5111,27 @@ function toggleMark(crmId){
 function toggleMarkedFilter(){
   S.showMarkedOnly=!S.showMarkedOnly;
   const mc=$('markedChip');if(mc)mc.classList.toggle('active',S.showMarkedOnly);
+
+  if(S.showMarkedOnly){
+    // Turning ON: if any marked account has N/A/Unknown CW, switch to All CWs
+    const hasNACW=ALL_DATA.some(r=>
+      MARKED_ACCOUNTS.has(r.crmId)&&!(/^CW\s*\d+$/i.test(r.cw)));
+    if(hasNACW){
+      S.cwUpTo='ALL';
+      updateCWOptions();
+      showGHToast('Some marked accounts have no CW \u2014 switched to \u201cAll CWs\u201d');
+    }
+  } else {
+    // Turning OFF: clear all filters and return Up to CW to current week
+    S.roleFilter=[];S.phases=[];S.statuses=[];
+    S.selMU=null;S.selPhase=null;S.selCW=null;S.selRole=null;
+    S.filterCW=null;
+    S.srchCustomer='';S.srchResponsible='';S.srchCrmId='';
+    ['srchCustomer','srchResponsible','srchCrmId'].forEach(id=>{const e=$(id);if(e)e.value='';});
+    syncSearchUI();
+    S.cwUpTo=''; // force reset so updateCWOptions restores current-week default
+    updateCWOptions();
+  }
   updateAll();
 }
 function updateMarkedChip(){
